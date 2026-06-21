@@ -22,8 +22,13 @@ const refreshValidator = [
   body("refreshToken").isString().notEmpty(),
 ];
 
+const firebaseValidator = [
+  body("idToken").isString().trim().notEmpty().withMessage("Firebase ID token is required"),
+];
+
 module.exports = {
   registerValidator,
   loginValidator,
   refreshValidator,
+  firebaseValidator,
 };

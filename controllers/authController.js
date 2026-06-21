@@ -11,6 +11,11 @@ const login = asyncHandler(async (req, res) => {
   res.status(200).json({ success: true, ...data });
 });
 
+const firebaseLogin = asyncHandler(async (req, res) => {
+  const data = await authService.loginFirebaseUser(req.body.idToken);
+  res.status(200).json({ success: true, ...data });
+});
+
 const refresh = asyncHandler(async (req, res) => {
   const data = await authService.refreshSession(req.body.refreshToken);
   res.status(200).json({ success: true, ...data });
@@ -28,6 +33,7 @@ const me = asyncHandler(async (req, res) => {
 module.exports = {
   register,
   login,
+  firebaseLogin,
   refresh,
   logout,
   me,

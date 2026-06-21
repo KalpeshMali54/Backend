@@ -18,13 +18,31 @@ const vibeSelectionValidator = [
 const bookingValidator = [
   body("eventDetails").isObject(),
   body("vibeSelection").isObject(),
+  body("vibeSelection.selected_package_id").isString().trim().notEmpty(),
   body("customization").isObject(),
   body("paymentMethod").isString().trim().notEmpty(),
   body("subtotal").optional().isFloat({ min: 0 }).toFloat(),
+];
+
+const createRazorpayOrderValidator = [
+  body().custom((value) => {
+    if (Object.keys(value || {}).length > 0) {
+      throw new Error("request body must be empty");
+    }
+    return true;
+  }),
+];
+
+const verifyRazorpayPaymentValidator = [
+  body("razorpayOrderId").isString().trim().notEmpty(),
+  body("razorpayPaymentId").isString().trim().notEmpty(),
+  body("razorpaySignature").isString().trim().notEmpty(),
 ];
 
 module.exports = {
   eventDetailsValidator,
   vibeSelectionValidator,
   bookingValidator,
+  createRazorpayOrderValidator,
+  verifyRazorpayPaymentValidator,
 };

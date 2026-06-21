@@ -1,11 +1,13 @@
 const express = require("express");
 const planningController = require("../controllers/planningController");
 const validateRequest = require("../middleware/validateRequest");
-const { optionalAuth } = require("../middleware/authMiddleware");
+const { optionalAuth, protect } = require("../middleware/authMiddleware");
 const {
   eventDetailsValidator,
   vibeSelectionValidator,
   bookingValidator,
+  createRazorpayOrderValidator,
+  verifyRazorpayPaymentValidator,
 } = require("../validators/planningValidators");
 
 const router = express.Router();
@@ -25,7 +27,23 @@ router
 
 router
   .route("/bookings")
-  .get(optionalAuth, planningController.getBookings)
-  .post(optionalAuth, bookingValidator, validateRequest, planningController.createBooking);
+  .get(protect, planningController.getBookings)
+  .post(protect, bookingValidator, validateRequest, planningController.createBooking);
+
+router.post(
+  "/bookings/:bookingId/create-order",
+  protect,
+  createRazorpayOrderValidator,
+  validateRequest,
+  planningController.createRazorpayOrder,
+);
+
+router.post(
+  "/bookings/:bookingId/verify-payment",
+  protect,
+  verifyRazorpayPaymentValidator,
+  validateRequest,
+  planningController.verifyRazorpayPayment,
+);
 
 module.exports = router;

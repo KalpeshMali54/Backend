@@ -6,6 +6,7 @@ const {
   registerValidator,
   loginValidator,
   refreshValidator,
+  firebaseValidator,
 } = require("../validators/authValidators");
 
 const router = express.Router();
@@ -13,6 +14,7 @@ const router = express.Router();
 router.post("/register", registerValidator, validateRequest, authController.register);
 router.post("/login", loginValidator, validateRequest, authController.login);
 router.post("/refresh", refreshValidator, validateRequest, authController.refresh);
+router.post("/firebase", firebaseValidator, validateRequest, authController.firebaseLogin);
 router.post("/logout", protect, authController.logout);
 router.get("/me", protect, authController.me);
 
